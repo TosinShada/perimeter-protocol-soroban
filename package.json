@@ -1,0 +1,19 @@
+{
+  "name": "@perimeter-protocol/backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "setup": "./initialize.sh ${NETWORK:-futurenet} && yarn dependencies && yarn install",
+    "clean": "rm -rf ../packages/sns-registry-client ../packages/sns-registrar-client ../packages/sns-resolver-client",
+    "reset": "yarn clean && yarn setup",
+    "dependencies": "cargo build --target wasm32-unknown-unknown --release && soroban contract bindings typescript --output-dir ../packages/sns-registry-client --contract-id $(cat ./.sns-dapp/sns_registry_id) --wasm ./target/wasm32-unknown-unknown/release/sns_registry.wasm --network $(cat ./.sns-dapp/network) && soroban contract bindings typescript --wasm ./target/wasm32-unknown-unknown/release/sns_registrar.wasm --contract-id $(cat ./.sns-dapp/sns_registrar_id) --output-dir ../packages/sns-registrar-client --network $(cat ./.sns-dapp/network) && soroban contract bindings typescript --wasm ./target/wasm32-unknown-unknown/release/sns_resolver.wasm --contract-id $(cat ./.sns-dapp/sns_resolver_id) --output-dir ../packages/sns-resolver-client --network $(cat ./.sns-dapp/network)"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.0",
+    "typescript": "5.1.6"
+  },
+  "engines": {
+    "node": ">=18.14.2",
+    "npm": ">=9.5.0"
+  }
+}
